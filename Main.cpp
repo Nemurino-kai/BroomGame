@@ -541,6 +541,8 @@ void Main()
 
 	// 使用するテクスチャ
 	TextureAsset::Register(L"classroom", L"教室400.jpg");
+	TextureAsset::Register(L"arm", L"腕.png");
+	TextureAsset::Register(L"broom", L"箒.png");
 
 	// 使用するサウンド
 	SoundAsset::Register(L"button", L"decision3.mp3");

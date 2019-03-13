@@ -4,11 +4,11 @@
 gameManager::gameManager():world(Vec2(0, -2.0)),camera(Vec2(1, 2.5), 120)
 {
 	wall = world.createLine(Vec2(0, 0), Line({ -0.01, 0 }, { 0.01, 0 }), none, none, PhysicsBodyType::Kinematic);
-	broom = world.createRect(Vec2(0, 0), RectF(Vec2(0, 0), Vec2(0.08, 3)));
+	broom = world.createRect(Vec2(0, 0), RectF(Vec2(0, 0), Vec2(0.08, 4)));
 	wheel = world.createWheelJoint(wall, broom, broom.getPos() + Vec2(0.04, 0), Vec2(0, 1), WheelJointState(false, 20.0, 60, 0.5));
 	previousPos = Window::GetState().windowPos;
 	previousDelta = Vec2(0, 0);
-
+	
 	timer.start();
 }
 
@@ -62,6 +62,8 @@ void gameManager::update()
 void gameManager::draw()
 {
 	TextureAsset(L"classroom").draw();
+	TextureAsset(L"arm").draw(0,500);
+	Texture(TextureAsset(L"broom")).rotateAt(TextureAsset(L"broom").width/2.0, TextureAsset(L"broom").height,45_deg).draw();
 
 	auto t = camera.createTransformer();
 
@@ -70,8 +72,9 @@ void gameManager::draw()
 		ball.draw(HSV(0.5, 0.4, 1.0));
 	}
 
-	wall.draw();
+	//wall.draw();
 	broom.draw();
+
 	camera.draw(Palette::Orange);
 }
 
