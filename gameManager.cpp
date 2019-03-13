@@ -63,8 +63,13 @@ void gameManager::draw()
 {
 	TextureAsset(L"classroom").draw();
 	TextureAsset(L"arm").draw(0,500);
-	Texture(TextureAsset(L"broom")).rotateAt(TextureAsset(L"broom").width/2.0, TextureAsset(L"broom").height,45_deg).draw();
+	double ydif = 280 + TextureAsset(L"broom").height *( 1 - cos(-broom.getAngle()) )/ 2.0;
+	double xdif = Window::Width() / 2.0 + TextureAsset(L"broom").height *sin(-broom.getAngle()) / 2.0;
 
+	Texture(TextureAsset(L"broom")).rotate(-broom.getAngle()).drawAt(xdif,ydif);
+
+	//ŽžŠÔ•\Ž¦
+	FontAsset(L"ScoreList")(getTime(),L"s").draw(10,0);
 	auto t = camera.createTransformer();
 
 	for (const auto& ball : balls)
@@ -73,12 +78,13 @@ void gameManager::draw()
 	}
 
 	//wall.draw();
-	broom.draw();
+	//broom.draw();
 
 	camera.draw(Palette::Orange);
+
 }
 
 double gameManager::getTime()
 {
-	return 	timer.ms()/1000.0;
+	return 	timer.ms()/10/100.0;
 }
