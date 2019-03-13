@@ -17,6 +17,7 @@ private:
 	PhysicsWheelJoint wheel;
 	CameraBox2D camera;
 	Vec2 previousPos;
+	Vec2 previousDelta;
 
 public:
 	gameManager();

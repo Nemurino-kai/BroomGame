@@ -1,4 +1,4 @@
-﻿# include <Siv3D.hpp> // OpenSiv3D v0.4.0
+﻿# include <Siv3D.hpp>
 # include <HamFramework.hpp>
 # include "gameManager.h"
 
@@ -525,6 +525,8 @@ void Main()
 	//
 	//  使用するフォント
 	//
+	FontManager::Register(L"TanukiMagic.ttf");
+
 	FontAsset::Register(L"Title", GameInfo::TitleFontSize, L"たぬき油性マジック", FontStyle::Outline);
 	FontAsset(L"Title").changeOutlineStyle(TextOutlineStyle(Color(60), Color(255), GameInfo::TitleFontSize * 0.05));
 	FontAsset::Register(L"Menu", GameInfo::MenuFontSize, L"たぬき油性マジック");
