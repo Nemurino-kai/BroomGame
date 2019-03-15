@@ -543,6 +543,10 @@ void Main()
 	TextureAsset::Register(L"classroom", L"教室400.jpg");
 	TextureAsset::Register(L"arm", L"腕.png");
 	TextureAsset::Register(L"broom", L"箒.png");
+	TextureAsset::Register(L"baseball", L"yakyu30.png");
+	TextureAsset::Register(L"soccer",L"soccer62.png");
+	TextureAsset::Register(L"basket", L"basket75.png");
+
 
 	// 使用するサウンド
 	SoundAsset::Register(L"button", L"decision3.mp3");

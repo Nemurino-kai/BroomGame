@@ -39,11 +39,13 @@ void gameManager::update()
 		impulse = Vec2(-1, 0);
 	}
 	if (Input::KeyQ.clicked) {
-		balls.push_back(world.createCircle(Vec2(-4, 3), 0.1));
+		//balls.push_back(world.createCircle(Vec2(-4, 3), 0.1));
+		balls.push_back(world.createCircle(Vec2(-4,3),0.24,PhysicsMaterial(0.3)));
 		balls[int(balls.size()) - 1].applyLinearImpulse(Vec2(3.0, 0)*balls[int(balls.size()) - 1].getMass());
 	}
 	if (Input::KeyW.clicked) {
-		balls.push_back(world.createCircle(Vec2(4, 3), 0.1));
+		//balls.push_back(world.createCircle(Vec2(4, 3), 0.1));
+		balls.push_back(world.createCircle(Vec2(4, 3), 0.3, PhysicsMaterial(0.3)));
 		balls[int(balls.size()) - 1].applyLinearImpulse(Vec2(-3.0, 0)*balls[int(balls.size()) - 1].getMass());
 	}
 
@@ -75,6 +77,9 @@ void gameManager::draw()
 	for (const auto& ball : balls)
 	{
 		ball.draw(HSV(0.5, 0.4, 1.0));
+		Texture(TextureAsset(L"basket")).scale(1.0 / camera.getScale()).drawAt(ball.getPos());
+		//Texture(TextureAsset(L"soccer")).scale(1.0 / camera.getScale()).drawAt(ball.getPos());
+		Println(camera.getScale());
 	}
 
 	//wall.draw();
