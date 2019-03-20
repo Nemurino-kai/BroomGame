@@ -19,6 +19,8 @@ bool gameManager::isOver()
 
 void gameManager::update()
 {
+	obstacleManage->update();
+
 	if (Input::MouseL.clicked)
 	{
 		balls.push_back(std::make_pair(world.createCircle(Vec2(0, 4), 0.1),L"baseball"));
@@ -41,22 +43,22 @@ void gameManager::update()
 	if (Input::KeyQ.clicked) {
 		//balls.push_back(world.createCircle(Vec2(-4, 3), 0.1));
 		addObstacle(Vec2(-4, 3), 0.24, PhysicsMaterial(0.3), L"soccer");
-		balls[int(balls.size()) - 1].first.applyLinearImpulse(Vec2(3.0, 0)*balls[int(balls.size()) - 1].first.getMass());
+		//balls[int(balls.size()) - 1].first.applyLinearImpulse(Vec2(3.0, 0)*balls[int(balls.size()) - 1].first.getMass());
 	}
 	if (Input::KeyW.clicked) {
 		addObstacle(Vec2(4, 3), 0.3, PhysicsMaterial(0.3), L"basket");
-		balls[int(balls.size()) - 1].first.applyLinearImpulse(Vec2(-3.0, 0)*balls[int(balls.size()) - 1].first.getMass());
+		//balls[int(balls.size()) - 1].first.applyLinearImpulse(Vec2(-3.0, 0)*balls[int(balls.size()) - 1].first.getMass());
 	}
 
 	previousPos = currentPos;
 
-	Println(broom.getAngle());
+	//Println(broom.getAngle());
 	if (broom.getAngle() > Pi / 2 || broom.getAngle() < -Pi / 2) { Println(L"GameOver!"); 
 	endflag = true;
 	}
 	broom.applyForce(-impulse * broom.getMass() / 5.0);
 
-	world.update();
+		world.update();
 
 }
 
@@ -78,7 +80,6 @@ void gameManager::draw()
 		ball.first.draw(HSV(0.5, 0.4, 1.0));
 
 		Texture(TextureAsset(ball.second)).scale(1.0 / camera.getScale()).drawAt(ball.first.getPos());
-		Println(camera.getScale());
 	}
 
 	//wall.draw();
@@ -96,6 +97,8 @@ double gameManager::getTime()
 void gameManager::addObstacle(Vec2 vec, double size,PhysicsMaterial material, String name)
 {
 	balls.push_back(std::make_pair(world.createCircle(vec, size, material), name));
+	balls[int(balls.size()) - 1].first.applyLinearImpulse(RandomSelect({ 1,-1 })*Vec2(3.0, 0)*balls[int(balls.size()) - 1].first.getMass());
+
 }
 
 obstacleManager::obstacleManager(gameManager *setGame)
@@ -115,16 +118,17 @@ void obstacleManager::update()
 			switch (Random(1, 3))
 			{
 			case 1:
-				//gameManage->balls.push_back(std::make_pair(world.createCircle(Vec2(0, 4), 0.1), L"baseball"));
+				gameManage->addObstacle(Vec2(4 * RandomSelect({1,-1}), 3), 0.1, PhysicsMaterial(), L"baseball");
 				break;
 			case 2:
+				gameManage->addObstacle(Vec2(4* RandomSelect({ 1,-1 }), 3), 0.24, PhysicsMaterial(0.3), L"soccer");
 				break;
 			case 3:
-				break;
-			default:
+				gameManage->addObstacle(Vec2(4 * RandomSelect({ 1,-1 }), 3), 0.3, PhysicsMaterial(0.3), L"basket");
 				break;
 			}
-
+			//障害物が出現したら、時間のカウントを0にする
+			previousTime = nowTime;
 		}
 	}
 }
