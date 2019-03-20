@@ -55,6 +55,7 @@ void gameManager::update()
 	//Println(broom.getAngle());
 	if (broom.getAngle() > Pi / 2 || broom.getAngle() < -Pi / 2) { Println(L"GameOver!"); 
 	endflag = true;
+	timer.pause();
 	}
 	broom.applyForce(-impulse * broom.getMass() / 5.0);
 
@@ -97,8 +98,15 @@ double gameManager::getTime()
 void gameManager::addObstacle(Vec2 vec, double size,PhysicsMaterial material, String name)
 {
 	balls.push_back(std::make_pair(world.createCircle(vec, size, material), name));
-	balls[int(balls.size()) - 1].first.applyLinearImpulse(RandomSelect({ 1,-1 })*Vec2(3.0, 0)*balls[int(balls.size()) - 1].first.getMass());
 
+	double forceRatio = 1.74 + (getTime()-100.0)/100.0;
+
+	if (vec.x > 0) {
+		balls.back().first.applyLinearImpulse(Vec2(-3.0, 0)*balls.back().first.getMass()*forceRatio);
+	}
+	else {
+		balls.back().first.applyLinearImpulse(Vec2(3.0, 0)*balls.back().first.getMass()*forceRatio);
+	}
 }
 
 obstacleManager::obstacleManager(gameManager *setGame)
@@ -113,7 +121,7 @@ void obstacleManager::update()
 	//1•b–ˆ‚É”»’è
 	if (nowTime - previousTime>1.0) {
 		//áŠQ•¨‚ªo‚é‚©—””»’è
-		if (Random() < 0.3) {
+		if (Random() < 0.015) {
 			//‚Ç‚ÌáŠQ•¨‚ğo‚·‚©Œˆ’è
 			switch (Random(1, 3))
 			{

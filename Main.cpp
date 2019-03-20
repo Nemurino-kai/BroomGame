@@ -128,11 +128,11 @@ struct ScoreData
 //
 const std::array<ScoreData, 5> defaultHighScores
 {
-	ScoreData{ 20.59, Date(2019,1,1) },
-	ScoreData{ 10.05, Date(2019,1,1) },
-	ScoreData{ 5.64, Date(2019,1,1) },
-	ScoreData{ 9.43, Date(2019,1,1) },
-	ScoreData{ 2.45, Date(2019,1,1) },
+	ScoreData{ 30.00, Date(2019,1,1) },
+	ScoreData{ 20.00, Date(2019,1,1) },
+	ScoreData{ 10.00, Date(2019,1,1) },
+	ScoreData{ 5.00, Date(2019,1,1) },
+	ScoreData{ 1.00, Date(2019,1,1) },
 };
 
 ///////////////////////////////////////////////////////////////////////
