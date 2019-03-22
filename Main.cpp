@@ -19,7 +19,9 @@ namespace GameInfo
 	const String TweetTail = L" 枚 #BiscuitClicker";
 
 	// ゲームの背景色
-	const ColorF BackgroundColor = ColorF(0.4, 0.7, 0.5);
+	//const ColorF BackgroundColor = ColorF(0.4, 0.7, 0.5);
+	const ColorF BackgroundColor = Color(L"#99CC00");
+
 
 	// シーン切り替え時のフェードイン・アウトの色
 	const ColorF FadeInColor = ColorF(1.0, 1.0, 1.0);
@@ -315,6 +317,8 @@ private:
 
 	const Circle titleButton = Circle(Window::Center().x, Window::Height() * 0.7, 25);
 	
+	bool rankIn = false,highScore=false;
+
 public:
 
 	~Result()
@@ -336,11 +340,17 @@ public:
 		if (m_highScores.back().score <= m_data->lastScore)
 		{
 			m_highScores.back() = { m_data->lastScore, Date::Today() };
+			rankIn = true;
 
 			std::sort(m_highScores.begin(), m_highScores.end(), [](const ScoreData& a, const ScoreData& b)
 			{
 				return a.score > b.score ? true : a.score == b.score ? a.date > b.date : false;
 			});
+
+			//更新後のハイスコアが直近のスコアか判定
+			if (m_highScores.front().score == m_data->lastScore) {
+				highScore = true;
+			}
 
 			Serializer<BinaryWriter>{GameInfo::SaveFilePath}(m_highScores);
 		}
@@ -350,6 +360,7 @@ public:
 	{
 		if (titleButton.leftClicked || Input::KeyEscape.clicked)
 		{
+			SoundAsset(L"button").play();
 			changeScene(L"Title");
 		}
 
@@ -368,6 +379,15 @@ public:
 
 		DrawBiscuit(titleButton, titleButton.mouseOver);
 		FontAsset(L"ResultButton")(L"タイトルへ").drawAt(titleButton.center.movedBy(0, 90));
+
+		if (highScore) {
+			FontAsset(L"RecordNotification")(L"HighScore!!").drawAt(Window::Center().x,310, Color(L"#FFcccc"));
+		}
+		else if (rankIn) {
+			FontAsset(L"RecordNotification")(L"RankIn!").drawAt(Window::Center().x, 310, Color(L"#FFdf8a"));
+				//Color(L"#3300CC"));
+		}
+
 
 	}
 };
@@ -400,6 +420,7 @@ public:
 	{
 		if ((Input::MouseL | Input::KeyEscape).clicked)
 		{
+			SoundAsset(L"button").play();
 			changeScene(L"Title");
 		}
 	}
@@ -417,10 +438,10 @@ public:
 			rect.draw(ColorF(HSV(40 * i, 0.8, 1), 0.8));
 
 			FontAsset(L"ScoreList")(m_highScores[i].score)
-				.draw(rect.pos + Point(32, (rect.h - h) / 2 + 2), Palette::Gray);
+				.draw(rect.pos + Point(32-10, (rect.h - h) / 2 + 2), Palette::Gray);
 
 			FontAsset(L"ScoreList")(m_highScores[i].score)
-				.draw(rect.pos + Point(30, (rect.h - h) / 2));
+				.draw(rect.pos + Point(30-10, (rect.h - h) / 2));
 
 			const Size dateSize = FontAsset(L"ScoreListDate")(m_highScores[i].date).region().size;
 
@@ -535,6 +556,7 @@ void Main()
 	FontAsset::Register(L"ResultButton", 32, L"たぬき油性マジック");
 	FontAsset::Register(L"GameTime", 40, Typeface::Light);
 	FontAsset::Register(L"ScoreList", 32, Typeface::Heavy);
+	FontAsset::Register(L"RecordNotification", 28, Typeface::Black);
 	FontAsset::Register(L"ScoreListDate", 16, Typeface::Regular, FontStyle::Italic);
 	FontAsset::Register(L"CreditBig", 32, Typeface::Bold);
 	FontAsset::Register(L"CreditSmall", 20, Typeface::Regular);
